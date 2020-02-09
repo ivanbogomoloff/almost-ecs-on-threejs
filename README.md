@@ -6,6 +6,13 @@ This is only started project and NOT PRODUCTION ready.
 
 Now it's not ready and in working process.
 
+## Instalation
+
+```bash
+$ npm install
+$ npm start
+```
+
 ## Description 
 
 This is implimentation based on articles from `t-machine.org` and some reports from youtube.
