@@ -5,14 +5,15 @@
 			<table>
 				<tr>
 					<td width="80%">
-						<select name="" id="select-entity" style="width: 100%">
-							<option value="" >Select entity</option>
+						<select v-model="selectedEntity" name="" id="select-entity" style="width: 100%">
+							<option disabled value="">Select entity</option>
 							<option :value="entity" v-for="entity in entities">{{ entity }}</option>
 						</select>
 					</td>
-					<td width="20%"><select class="form-control">
-						<option value="" >Action</option>
-						<option :value="action.id" v-for="action in entityActions">{{ action.title }}</option>
+					<td width="20%">
+						<select v-model="selectEntityAction" class="form-control">
+						<option disabled value="" >Action</option>
+						<option v-bind:selected="selectEntityAction === action.id" :value="action.id" v-for="action in entityActions">{{ action.title }}</option>
 					</select>
 					</td>
 				</tr>
@@ -32,8 +33,28 @@
 	            entitiesCount: function () {
                     return EDITOR.entitiesCount();
                 },
-	            entityActions: EDITOR.entityActions
+	            entityActions: EDITOR.entityActions,
+	            selectedEntity: '',
+                selectEntityAction: ''
             };
+        },
+	    watch: {
+            selectedEntity: function (v) {
+                console.log('[EDITOR] on entity select = '+v);
+                this.selectEntityAction = '';
+            },
+            selectEntityAction: function (v) {
+	            if(this.selectedEntity != '' && v)
+	            {
+                    console.log('[EDITOR] on entity action '+v+' select = '+this.selectedEntity);
+                    // DO SOME ACTION WITH ENTITY
+		            switch (v) {
+			            case EDITOR.ENTITY_ACTION_HIGHLIGHT:
+							
+			                break;
+                    }
+	            }
+            }
         }
     }
 </script>
