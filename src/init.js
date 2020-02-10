@@ -41,6 +41,9 @@ ECS.entity.addComponent(
     cubeEntity,
     ECS.component.create(PositionComponent.id),
     {x: 0, y: 1 / 2, z: 0}
+).addComponent(
+    cubeEntity,
+    ECS.component.create(HightLightMeshComponent.id)
 );
 
 let cubeEntity2 = ECS.entity.create('cube_2');
@@ -48,6 +51,13 @@ ECS.entity.addComponent(
     cubeEntity2,
     ECS.component.create(CubeDrawComponent.id),
     {color: 0xB40404 }  //Red
+).addComponent(
+    cubeEntity2,
+    ECS.component.create(PositionComponent.id),
+    {x: 4, y: 1 / 2, z: 0}
+).addComponent(
+    cubeEntity2,
+    ECS.component.create(HightLightMeshComponent.id)
 );
 
 let lightEntity = ECS.entity.create('map_light');

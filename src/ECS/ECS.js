@@ -111,18 +111,18 @@ const ECS = {
             ECS.systems.push(system);
             ECS.system_index_map[id] = ECS.system_index;
 
-            ECS.system_entities[id] = [];
-            ECS.system_components[id] = [];
+            ECS.system_entities[id] = {};
+            ECS.system_components[id] = {};
 
             ECS.system_index++;
         },
         registerEntity: function (systemId, entity) {
-            if(ECS.system_entities.hasOwnProperty(systemId)) {
-                ECS.system_entities[systemId].push(entity);
-                ECS.system_entities_index_map[systemId+'_'+entity] = ECS.system_entities_index;
+            if(!ECS.system_entities.hasOwnProperty(systemId)) {
+                ECS.system_entities[systemId] = {};
+            }
 
-                ECS.system_entities_index++;
-
+            if(!ECS.system_entities[systemId].hasOwnProperty(entity)) {
+                ECS.system_entities[systemId][entity] = entity;
                 console.log('[system.'+systemId+'] registerEntity: ' + entity);
             } else {
                 console.log('[system.'+systemId+'] registerEntity error: system not found');
@@ -134,11 +134,9 @@ const ECS = {
         getEntities: function(systemId)
         {
             let entities = [];
-            let entitiesInSystem = ECS.system_entities[systemId];
-            for(let key in ECS.system_entities_index_map) {
-                let index = ECS.system_entities_index_map[key];
+            for(let entity in ECS.system_entities[systemId]) {
                 let components = [];
-                let entityComponentsObject = ECS.entity.getComponents(entitiesInSystem[index]);
+                let entityComponentsObject = ECS.entity.getComponents(entity);
                 for(let ck in entityComponentsObject) {
                     components.push({
                         id: ck,
@@ -146,7 +144,7 @@ const ECS = {
                     });
                 }
                 entities.push({
-                    id: entitiesInSystem[index],
+                    id: entity,
                     components: components
                 });
             }

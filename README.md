@@ -21,4 +21,14 @@ Please welcome, by pull requests of course.
 
 TODO...
 
+### Improvements
+
+- Remove component objects/function and make it simple string ?
+- Resolve components to json string data like `{id: "position", data: {} }` ?
+- Resolve system dependencies to independent initialization ordering or auto configuration order ?
+
+
+
+
+
 

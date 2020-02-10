@@ -1,64 +1,61 @@
 import * as THREE from "three";
 import {CubeDrawComponent} from "../Component/Drawable/CubeDrawComponent";
 import {HightLightMeshComponent} from "../Component/HightLightMeshComponent";
+import {CameraComponent} from "../Component/CameraComponent";
+import {RenderComponent} from "../Component/RenderComponent";
 
 class RayCasterSystem {
     constructor(renderingSystem) {
         this.camera = null;
+        this.renderer = null;
         this.rayCaster = null;
         this.mouseVector2 = null;
-        this.renderingSystem = renderingSystem;
         this.hightLightComponent = null;
-
-        this.camera     = renderingSystem.camera;
-        this.renderer   = renderingSystem.renderer;
+        this.renderingSystem = renderingSystem;
     }
 
     init(id, entities) {
-        let self = this;
         let _ = this;
         this.rayCaster = new THREE.Raycaster();
         this.mouseVector2 = new THREE.Vector2( 1, 1 );
-        entities.forEach(function (entity) {
-            entity.components.forEach(function (component) {
-                switch (component.id) {
-                    case HightLightMeshComponent.id:
-                        self.hightLightComponent = HightLightMeshComponent;
-                        break;
+        this.camera = CameraComponent.init();
+        this.renderer = RenderComponent.init();
+        this.hightLightComponent = HightLightMeshComponent;
+
+        if(this.renderer) {
+            this.renderer.domElement.addEventListener('mousemove', function (e) {
+                e.preventDefault();
+                if(_.camera != null
+                    && _.renderer != null
+                )
+                {
+                    entities.forEach(function (entity) {
+                        if(_.renderingSystem)
+                        {
+
+                            entity.components.forEach(function (component) {
+                                switch (component.id) {
+                                    case CubeDrawComponent.id:
+                                        let obj = _.renderingSystem.getDrawableEntity(entity);
+                                        if(obj && _.hightLightComponent != null)
+                                        {
+                                            obj.components.forEach(function (drawableComponent) {
+                                                _.hightLightComponent.load(entity.id, drawableComponent.init_material);
+                                                _.findIntersection({
+                                                    id: entity.id,
+                                                    object3d: drawableComponent.object3d
+                                                });
+                                            });
+                                        }
+                                        break;
+                                }
+                            });
+                        }
+                    });
                 }
             });
-        });
+        }
 
-        document.addEventListener('mousemove', function (e) {
-            e.preventDefault();
-            if(self.camera != null
-                && self.renderer != null
-            )
-            {
-                entities.forEach(function (entity) {
-                    if(_.renderingSystem)
-                    {
-                        entity.components.forEach(function (component) {
-                            switch (component.id) {
-                                case CubeDrawComponent.id:
-                                    let obj = _.renderingSystem.getDrawableEntity(entity);
-                                    if(obj && _.hightLightComponent != null)
-                                    {
-                                        obj.components.forEach(function (drawableComponent) {
-                                            _.hightLightComponent.load(entity.id, drawableComponent.init_material);
-                                            _.findIntersection({
-                                                id: entity.id,
-                                                object3d: drawableComponent.object3d
-                                            });
-                                        });
-                                    }
-                                    break;
-                            }
-                        });
-                    }
-                });
-            }
-        });
     }
 
     findIntersection(entityForTest) {
@@ -78,8 +75,6 @@ class RayCasterSystem {
             if(self.hightLightComponent) {
                 self.hightLightComponent.highlight(entityForTest.id, intersectMesh);
             }
-
-            self.log('[intersect for entity: ' + entityForTest.id);
         }
     }
 

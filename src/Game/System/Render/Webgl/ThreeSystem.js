@@ -36,28 +36,17 @@ class ThreeSystem {
     }
 
     init(systemId, entities) {
+        this.scene      = SceneComponent.init();
+        this.camera     = CameraComponent.init();
+        this.camera.position.set(0, 2, -1);
+        this.renderer = RenderComponent.init();
+        this.renderer.setSize(this.renderWidth, this.renderHeight);
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        this.viewPort.appendChild(this.renderer.domElement);
+
         let _ = this;
         entities.forEach(function (entity) {
-            entity.components.forEach(function (component) {
-                switch (component.id) {
-                    case SceneComponent.id:
-                        _.scene = SceneComponent.init();
-                        break;
-                    case CameraComponent.id:
-                        _.camera = CameraComponent.init();
-                        _.camera.position.set(0, 2, -1);
-                        break;
-                    case RenderComponent.id:
-                        _.renderer = RenderComponent.init();
-                        _.renderer.setSize(_.renderWidth, _.renderHeight);
-                        _.renderer.shadowMap.enabled = true;
-                        _.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                        _.viewPort.appendChild(_.renderer.domElement);
-                        break;
-                }
-            });
-
-            // Busnes logic :)
             switch (entity.id) {
                 case 'map':
                     entity.components.forEach(function (mapComponent) {
@@ -183,8 +172,9 @@ class ThreeSystem {
             });
 
         });
-
-        this.renderer.render(this.scene, this.camera);
+        if(this.renderer) {
+            this.renderer.render(this.scene, this.camera);
+        }
     }
 
     getEntityPosition(entity) {
