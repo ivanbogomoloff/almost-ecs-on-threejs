@@ -1,32 +1,33 @@
-import {ISystem} from "../../ECS/ISystem";
 import * as THREE from "three";
 import {CubeDrawComponent} from "../Component/Drawable/CubeDrawComponent";
 import {HightLightMeshComponent} from "../Component/HightLightMeshComponent";
 
-class RayCasterSystem extends ISystem {
-    constructor(id) {
-        super(id);
+class RayCasterSystem {
+    constructor(renderingSystem) {
         this.camera = null;
         this.rayCaster = null;
         this.mouseVector2 = null;
-        this.renderingSystem = null;
+        this.renderingSystem = renderingSystem;
         this.hightLightComponent = null;
+
+        this.camera     = renderingSystem.camera;
+        this.renderer   = renderingSystem.renderer;
     }
 
-    init() {
-        super.log('init start');
-        this.rayCaster = new THREE.Raycaster();
-        this.mouseVector2 = new THREE.Vector2( 1, 1 );
-        this.hightLightComponent = super.getComponent(null, HightLightMeshComponent.ID);
-
-        this.renderingSystem = super.getDependency('render');
-        if(this.renderingSystem ) {
-            this.camera = this.renderingSystem .camera;
-            this.renderer = this.renderingSystem .renderer;
-        }
-
+    init(id, entities) {
         let self = this;
         let _ = this;
+        this.rayCaster = new THREE.Raycaster();
+        this.mouseVector2 = new THREE.Vector2( 1, 1 );
+        entities.forEach(function (entity) {
+            entity.components.forEach(function (component) {
+                switch (component.id) {
+                    case HightLightMeshComponent.id:
+                        self.hightLightComponent = HightLightMeshComponent;
+                        break;
+                }
+            });
+        });
 
         document.addEventListener('mousemove', function (e) {
             e.preventDefault();
@@ -34,24 +35,26 @@ class RayCasterSystem extends ISystem {
                 && self.renderer != null
             )
             {
-                _.getEntities().forEach(function (entity) {
+                entities.forEach(function (entity) {
                     if(_.renderingSystem)
                     {
-                        let cubeSupport = _.renderingSystem.getComponent(entity, CubeDrawComponent.ID);
-                        if(cubeSupport)
-                        {
-                            let obj = _.renderingSystem.getDrawableEntity(entity);
-                            if(obj && _.hightLightComponent != null)
-                            {
-                                obj.components.forEach(function (drawableComponent) {
-                                    _.hightLightComponent.load(entity.id, drawableComponent.init_material);
-                                    _.findIntersection({
-                                        id: entity.id,
-                                        object3d: drawableComponent.object3d
-                                    });
-                                });
+                        entity.components.forEach(function (component) {
+                            switch (component.id) {
+                                case CubeDrawComponent.id:
+                                    let obj = _.renderingSystem.getDrawableEntity(entity);
+                                    if(obj && _.hightLightComponent != null)
+                                    {
+                                        obj.components.forEach(function (drawableComponent) {
+                                            _.hightLightComponent.load(entity.id, drawableComponent.init_material);
+                                            _.findIntersection({
+                                                id: entity.id,
+                                                object3d: drawableComponent.object3d
+                                            });
+                                        });
+                                    }
+                                    break;
                             }
-                        }
+                        });
                     }
                 });
             }

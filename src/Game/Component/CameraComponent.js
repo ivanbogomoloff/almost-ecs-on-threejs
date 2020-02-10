@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 const CameraComponent = {
-    ID: 'three_js.camera',
+    id: 'three_js.camera',
     _instance: null,
     init: function () {
         this._instance = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );

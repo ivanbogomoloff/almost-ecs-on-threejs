@@ -1,24 +1,25 @@
-import {ISystem} from "../../ECS/ISystem";
 import {PositionComponent} from "../Component/PositionComponent";
 
-class MovementSystem extends ISystem
+class MovementSystem
 {
-    constructor(id) {
-        super(id);
+    constructor(renderingSystem) {
         this.movable = [];
-        this.renderingSystem = null;
+        this.renderingSystem = renderingSystem;
     }
-    init() {
-        super.log('init start');
-        this.renderingSystem = super.getDependency('render');
 
+    init(id, entities)
+    {
         let _ = this;
-        super.getEntities().forEach(function (entity) {
-            let posComp = _.getComponentWithParams(entity, PositionComponent.ID);
-            if(posComp) {
-                let position = posComp.self.init(entity.id, posComp.params);
-                _.movable.push({entityId: entity.id, position: position});
-            }
+        entities.forEach(function (entity) {
+            entity.components.forEach(function (component) {
+                switch (component.id) {
+                    case PositionComponent.id:
+                        let position = PositionComponent.init(entity.id, component.args);
+                        _.movable.push({entityId: entity.id, position: position});
+                        break;
+                }
+            });
+
         });
     }
 

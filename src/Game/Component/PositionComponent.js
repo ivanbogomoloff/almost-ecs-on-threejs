@@ -16,12 +16,12 @@ function Position(p) {
 }
 
 const PositionComponent = {
-    ID: 'position',
+    id: 'position',
     _instances: {},
     init: function (entityId, componentParams) {
         if(!this._instances.hasOwnProperty(entityId)) {
             this._instances[entityId] = new Position(componentParams);
-            console.log('[component.'+this.ID+'] init for ' + entityId);
+            console.log('[component.'+this.id+'] init for ' + entityId);
         }
         
         return this._instances[entityId];

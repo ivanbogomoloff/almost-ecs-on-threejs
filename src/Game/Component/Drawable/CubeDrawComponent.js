@@ -2,9 +2,11 @@ import * as THREE from "three";
 import {ShadowMesh} from "three/examples/jsm/objects/ShadowMesh";
 
 const CubeDrawComponent = {
-    ID: 'three_js.draw.cube',
+    id: 'three_js.draw.cube',
     init: function (params) {
+        console.log('[component.'+this.id+'] init with params:');
         console.log(params);
+
         let geometry = new THREE.BoxGeometry(1, 1, 1);
         let material = function () {
             return new THREE.MeshPhongMaterial({

@@ -16,68 +16,80 @@ import {MovementSystem} from "./Game/System/MovementSystem";
 import {ECS} from "./ECS/ECS";
 import {Config} from "./Game/Config";
 
-let mapEntity        = ECS.createEntity('map');
-ECS.entity.addComponent(mapEntity, PlaneDrawComponent);
-ECS.entity.addComponent(mapEntity, PlaneSurfaceComponent);
+let userEntity = ECS.entity.create('user');
+ECS.entity.addComponent(userEntity, ECS.component.create(CameraComponent.id));
+ECS.entity.addComponent(userEntity, ECS.component.create(RenderComponent.id));
 
-let cubeEntity = ECS.createEntity('cube_1');
-ECS.entity.addComponent(cubeEntity, CubeDrawComponent, {color: 0xB404AE });
-//Purple
-ECS.entity.addComponent(cubeEntity, PositionComponent, {x: 0, y: 1 / 2, z: 0});
+let mapEntity = ECS.entity.create('map');
+ECS.entity.addComponent(
+    mapEntity,
+    ECS.component.create(PlaneDrawComponent.id)
+).addComponent(
+    mapEntity,
+    ECS.component.create(PlaneSurfaceComponent.id)
+).addComponent(
+    mapEntity,
+    ECS.component.create(SceneComponent.id)
+);
 
-let cubeEntity2 = ECS.createEntity('cube_2');
-ECS.entity.addComponent(cubeEntity2, CubeDrawComponent, {color: 0xB40404 });
-// Red
-ECS.entity.addComponent(cubeEntity2 ,PositionComponent, {x: -5, y: 1 / 2, z: 0});
+let cubeEntity = ECS.entity.create('cube_1');
+ECS.entity.addComponent(
+    cubeEntity,
+    ECS.component.create(CubeDrawComponent.id),
+    {color: 0xB404AE }  //Purple
+).addComponent(
+    cubeEntity,
+    ECS.component.create(PositionComponent.id),
+    {x: 0, y: 1 / 2, z: 0}
+);
 
-let lightEntity = ECS.createEntity('map_light');
-ECS.entity.addComponent(lightEntity, PointLightComponent);
-ECS.entity.addComponent(lightEntity, Vector4dComponent);
+let cubeEntity2 = ECS.entity.create('cube_2');
+ECS.entity.addComponent(
+    cubeEntity2,
+    ECS.component.create(CubeDrawComponent.id),
+    {color: 0xB40404 }  //Red
+);
 
-let movementSystem = new MovementSystem('movement');
-ECS.system.registerEntity(movementSystem, cubeEntity);
-ECS.system.registerEntity(movementSystem, cubeEntity2);
-ECS.system.registerComponent(movementSystem, PositionComponent);
+let lightEntity = ECS.entity.create('map_light');
+ECS.entity.addComponent(
+    lightEntity,
+    ECS.component.create(PointLightComponent.id)
+).addComponent(
+    lightEntity,
+    ECS.component.create(Vector4dComponent.id)
+);
 
-let rayCasterSystem = new RayCasterSystem('raycaster');
-ECS.system.registerEntity(rayCasterSystem, cubeEntity);
-ECS.system.registerEntity(rayCasterSystem, cubeEntity2);
-ECS.system.registerComponent(rayCasterSystem, HightLightMeshComponent);
+let cameraObserverSystem = new CameraObserverSystem();
+ECS.system.add('camera_observer', cameraObserverSystem);
+ECS.system.registerEntity('camera_observer', userEntity);
 
-let cameraObserverSystem = new CameraObserverSystem('camera_observer');
-ECS.system.registerComponent(cameraObserverSystem, CameraComponent);
-ECS.system.registerComponent(cameraObserverSystem, RenderComponent);
+let renderingSystem = new ThreeSystem(document.getElementById('render'));
+ECS.system.add('render', renderingSystem);
 
-let renderingSystem = new ThreeSystem('render', document.getElementById('render'));
-ECS.system.registerComponent(renderingSystem, PositionComponent);
-ECS.system.registerComponent(renderingSystem, PointLightComponent);
-ECS.system.registerComponent(renderingSystem, Vector4dComponent);
-ECS.system.registerComponent(renderingSystem, PlaneSurfaceComponent);
-ECS.system.registerComponent(renderingSystem, CubeDrawComponent);
-ECS.system.registerComponent(renderingSystem, PlaneDrawComponent);
-ECS.system.registerComponent(renderingSystem, SceneComponent);
-ECS.system.registerComponent(renderingSystem, CameraComponent);
-ECS.system.registerComponent(renderingSystem, RenderComponent);
+ECS.system.registerEntity('render', userEntity);
+ECS.system.registerEntity('render', mapEntity);
+ECS.system.registerEntity('render', lightEntity);
+ECS.system.registerEntity('render', cubeEntity);
+ECS.system.registerEntity('render', cubeEntity2);
 
-ECS.system.registerEntity(renderingSystem, mapEntity);
-ECS.system.registerEntity(renderingSystem, lightEntity);
-ECS.system.registerEntity(renderingSystem, cubeEntity);
-ECS.system.registerEntity(renderingSystem, cubeEntity2);
+let movementSystem = new MovementSystem(renderingSystem);
+ECS.system.add('movement', movementSystem);
 
-ECS.systemsInitializer.add(renderingSystem);
-ECS.systemsInitializer.add(cameraObserverSystem);
+ECS.system.registerEntity('movement', cubeEntity);
+ECS.system.registerEntity('movement', cubeEntity2);
 
-rayCasterSystem.addDependency('render', renderingSystem);
-ECS.systemsInitializer.add(rayCasterSystem);
+let rayCasterSystem = new RayCasterSystem(renderingSystem);
+ECS.system.add('raycaster', rayCasterSystem);
+ECS.system.registerEntity('raycaster', cubeEntity);
+ECS.system.registerEntity('raycaster', cubeEntity2);
 
-movementSystem.addDependency('render', renderingSystem);
-ECS.systemsInitializer.add(movementSystem);
-
-ECS.systemsInitializer.init();
+ECS.system.init();
 
 let fps = Config.getFps();
 let loop = new FpsLoopHelper(function () {
-    ECS.systemsInitializer.loop();
+    ECS.systems.forEach(function (system) {
+        system.loop(ECS.system);
+    });
 }, fps);
 
 loop.run();

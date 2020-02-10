@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 const PointLightComponent = {
-    ID: 'three_js.draw.point_light',
+    id: 'three_js.draw.point_light',
     init: function () {
         let light = new THREE.PointLight( 0xfffcdd, 2.3, 500 );
         light.position.set( 50, 100, 10 );

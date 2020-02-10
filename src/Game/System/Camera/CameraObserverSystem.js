@@ -1,13 +1,34 @@
-import {ISystem} from "../../../ECS/ISystem";
 import * as THREE from "three";
 import {RenderComponent} from "../../Component/RenderComponent";
 import {CameraComponent} from "../../Component/CameraComponent";
 import {PointerLockControls} from "three/examples/jsm/controls/PointerLockControls";
+import {HightLightMeshComponent} from "../../Component/HightLightMeshComponent";
 
-class CameraObserverSystem extends ISystem
+class CameraObserverSystem
 {
-    init() {
-        super.log('init start');
+    constructor() {
+        this.camera = null;
+        this.renderer = null;
+        this.pointerLock = null;
+        this.domElement = document.body;
+    }
+
+    init(id, entities) {
+        let _ = this;
+        entities.forEach(function (entity) {
+            entity.components.forEach(function (component) {
+                switch (component.id) {
+                    case CameraComponent.id:
+                        _.camera = CameraComponent.init();
+                        _.pointerLock = new PointerLockControls(_.camera, _.domElement);
+                        break;
+                    case RenderComponent.id:
+                        _.renderer = RenderComponent.init();
+                        break;
+                }
+            });
+        });
+
         this.pointerLockState = {
             lookUp: false,
             lookDown: false,
@@ -22,7 +43,6 @@ class CameraObserverSystem extends ISystem
         this.pointerLock_velocity.y = 0.1;
         this.pointerLock_direction = new THREE.Vector3();
 
-        let _ = this;
         this.onKeyDown = function ( event ) {
             switch ( event.keyCode ) {
                 case 38: // up
@@ -75,13 +95,8 @@ class CameraObserverSystem extends ISystem
         document.addEventListener('keydown', this.onKeyDown, false);
         document.addEventListener('keyup', this.onKeyUp, false);
 
-        this.camera   = this.getComponent(null, CameraComponent.ID).get();
-        this.pointerLock = new PointerLockControls(this.camera, document.body);
-
-        let renderer = this.getComponent(null, RenderComponent.ID).get();
-
-        if(renderer && this.pointerLock) {
-            renderer.domElement.addEventListener('click', function() {
+        if(this.renderer && this.pointerLock) {
+            this.renderer.domElement.addEventListener('click', function() {
                 _.pointerLock.lock();
             }, false);
         } else {
@@ -92,7 +107,7 @@ class CameraObserverSystem extends ISystem
     loop() {
         let pointerLock = this.pointerLock;
         let camera = this.camera;
-        if(pointerLock.isLocked === true)
+        if(pointerLock != null && pointerLock.isLocked === true)
         {
             //Тут bool преобразуются в 0 и 1 и удобно определять направление
             this.pointerLock_direction.z = Number( this.pointerLockState.moveForward ) - Number( this.pointerLockState.moveBackward );
