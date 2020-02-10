@@ -17,7 +17,6 @@ const ECS = {
     system_components: {}, //{}.[]
     system_components_index: 0,
     system_components_index_map: {},
-
     debugDump: function() {
         console.log(this);
     },

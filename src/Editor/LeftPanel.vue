@@ -1,6 +1,6 @@
 <template>
 	<div id="controls-left" style="max-height: 800px; overflow: auto">
-		<h1>Editor v {{ config.EDITOR_VERSION }}</h1>
+		<h1>Editor version {{ version }}</h1>
 		<div class="controls-panel">
 			<EntitiesPanel />
 			<ComponentsPanel />
@@ -26,11 +26,15 @@
 	import ComponentsPanel from './LeftPanel/ComponentsPanel.vue'
 	import SystemsPanel from './LeftPanel/SystemsPanel.vue'
 	import {Config} from "../Game/Config";
+    import {EDITOR} from "./EDITOR";
 
     export default {
         name: 'LeftPanel',
 	    data: function(){
-            return { config: Config };
+            return {
+                config: Config,
+	            version: EDITOR.version
+            };
 	    },
         components: {
             EntitiesPanel,
