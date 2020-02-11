@@ -50,7 +50,7 @@
                     // DO SOME ACTION WITH ENTITY
 		            switch (v) {
 			            case EDITOR.ENTITY_ACTION_HIGHLIGHT:
-							
+
 			                break;
                     }
 	            }
