@@ -25,8 +25,8 @@ const HightLightMeshComponent = {
     restore: function(entityId, mesh) {
         this._instances[entityId].restore(mesh);
     },
-    highlight: function (entityId, intersectMesh) {
-        this._instances[entityId].highlight(intersectMesh);
+    highlight: function (entityId, mesh) {
+        this._instances[entityId].highlight(mesh);
     }
 };
 

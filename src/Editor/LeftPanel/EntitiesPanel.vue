@@ -50,7 +50,10 @@
                     // DO SOME ACTION WITH ENTITY
 		            switch (v) {
 			            case EDITOR.ENTITY_ACTION_HIGHLIGHT:
-
+							EDITOR.entityAction('high_light_on', this.selectedEntity);
+			                break;
+			            case EDITOR.UNDO_ENTITY_ACTION_HIGHLIGHT:
+                            EDITOR.entityAction('high_light_off', this.selectedEntity);
 			                break;
                     }
 	            }

@@ -12,9 +12,13 @@ class RayCasterSystem {
         this.mouseVector2 = null;
         this.hightLightComponent = null;
         this.renderingSystem = renderingSystem;
+        this._disabled = false;
+        this._needRestore = false;
+        this.entities = [];
     }
 
     init(id, entities) {
+        this.entities = entities;
         let _ = this;
         this.rayCaster = new THREE.Raycaster();
         this.mouseVector2 = new THREE.Vector2( 1, 1 );
@@ -24,41 +28,63 @@ class RayCasterSystem {
 
         if(this.renderer) {
             this.renderer.domElement.addEventListener('mousemove', function (e) {
-                e.preventDefault();
-                if(_.camera != null
-                    && _.renderer != null
-                )
-                {
-                    entities.forEach(function (entity) {
-                        if(_.renderingSystem)
-                        {
-
-                            entity.components.forEach(function (component) {
-                                switch (component.id) {
-                                    case CubeDrawComponent.id:
-                                        let obj = _.renderingSystem.getDrawableEntity(entity);
-                                        if(obj && _.hightLightComponent != null)
-                                        {
-                                            obj.components.forEach(function (drawableComponent) {
-                                                _.hightLightComponent.load(entity.id, drawableComponent.init_material);
-                                                _.findIntersection({
-                                                    id: entity.id,
-                                                    object3d: drawableComponent.object3d
-                                                });
-                                            });
-                                        }
-                                        break;
-                                }
-                            });
-                        }
-                    });
+                if(_._disabled) {
+                    return true;
                 }
+
+                e.preventDefault();
+                _._highLight(e);
             });
         }
 
     }
 
-    findIntersection(entityForTest) {
+    _highLight(event){
+        let _ = this;
+        if(_.camera != null
+            && _.renderer != null
+        )
+        {
+            _.entities.forEach(function (entity) {
+                if(_.renderingSystem)
+                {
+                    _._iterateEntityComponents(entity, event);
+                }
+            });
+        }
+    }
+
+    _iterateEntityComponents(entity, event)
+    {
+        let _ = this;
+        entity.components.forEach(function (component) {
+            switch (component.id) {
+                case CubeDrawComponent.id:
+                    let obj = _.renderingSystem.getDrawableEntity(entity);
+                    if(obj && _.hightLightComponent != null)
+                    {
+                        obj.components.forEach(function (drawableComponent) {
+                            // Handle system disable!
+                            if(_._needRestore) {
+                                _.hightLightComponent.restore(entity.id, drawableComponent.object3d);
+                            } else {
+                                _.hightLightComponent.load(entity.id, drawableComponent.init_material);
+                                _.findIntersection({
+                                    id: entity.id,
+                                    object3d: drawableComponent.object3d
+                                }, event);
+                            }
+                        });
+                    }
+                    break;
+            }
+        });
+    }
+
+    findIntersection(entityForTest, event) {
+        if(event === null) {
+            return;
+        }
         let self = this;
         self.hightLightComponent.restore(entityForTest.id, entityForTest.object3d);
         self.rayCaster.setFromCamera( self.mouseVector2, self.camera );
@@ -79,7 +105,23 @@ class RayCasterSystem {
     }
 
     loop(){
+        // Handle system disable!
+        if(this._needRestore) {
+            let _ = this;
+            _.entities.forEach(function (entity) {
+                _._iterateEntityComponents(entity);
+            });
+            _._needRestore = false;
+            _._disabled = true;
+        }
+    }
 
+    disable(){
+        this._needRestore = true;
+    }
+
+    enable(){
+        this._disabled = false;
     }
 }
 

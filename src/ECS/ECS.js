@@ -17,6 +17,7 @@ const ECS = {
     system_components: {}, //{}.[]
     system_components_index: 0,
     system_components_index_map: {},
+    system_disabled: [],
     debugDump: function() {
         console.log(this);
     },
@@ -92,8 +93,39 @@ const ECS = {
                 }
             }
         },
+        enabled: function(id) {
+            return ECS.system_disabled.indexOf(id) === -1;
+        },
+        disableSystem: function(systemId) {
+            let system = ECS.system.getSystem(systemId);
+            if(system) {
+                ECS.system_disabled.push(systemId);
+                if(typeof system.disable === 'function') {
+                    system.disable();
+                }
+                console.log('['+systemId+'.disableSystem] is disabled');
+            }
+            else {
+                console.log('['+systemId+'.disableSystem] error: system not found');
+            }
+        },
+        enableSystem: function(systemId) {
+            if(!ECS.system.hasSystem(systemId)) {
+                console.log('['+systemId+'.enableSystem] error: system not found');
+                return;
+            }
+            let index = ECS.system_disabled.indexOf(systemId);
+            if(index >= 0) {
+                let systemId = ECS.system_disabled[index];
+                let system   = ECS.system.getSystem(systemId);
+                if(typeof  system.enable === 'function') {
+                    system.enable();
+                }
+                delete ECS.system_disabled[index];
+            }
+        },
         getSystem: function(systemId){
-            if(ECS.system.has(systemId)) {
+            if(ECS.system.hasSystem(systemId)) {
                 let index = ECS.system_index_map[systemId];
                 return ECS.systems[index];
             }

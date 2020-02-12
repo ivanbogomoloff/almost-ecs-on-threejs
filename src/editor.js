@@ -20,6 +20,7 @@ import {Config} from "./Game/Config";
 import Vue from 'vue/dist/vue.esm'
 import {EDITOR} from "./Editor/EDITOR";
 import LeftPanel from './Editor/LeftPanel.vue'
+import {HighLightSystem} from "./Editor/System/HighLightSystem";
 
 let userEntity = ECS.entity.create('user');
 ECS.entity.addComponent(userEntity, ECS.component.create(CameraComponent.id));
@@ -98,12 +99,22 @@ ECS.system.add('raycaster', rayCasterSystem);
 ECS.system.registerEntity('raycaster', cubeEntity);
 ECS.system.registerEntity('raycaster', cubeEntity2);
 
+/**
+ * EDITOR SYSTEMS
+ */
+ECS.system.add('editor.high_light', new HighLightSystem(renderingSystem));
+ECS.system.registerEntity('editor.high_light', cubeEntity);
+ECS.system.registerEntity('editor.high_light', cubeEntity2);
+ECS.system.registerEntity('editor.high_light', mapEntity);
+
 ECS.system.init();
 
 let fps = Config.getFps();
 let loop = new FpsLoopHelper(function () {
     ECS.systems.forEach(function (system) {
-        system.loop(ECS.system);
+        if(ECS.system.enabled(system.id)) {
+            system.loop();
+        }
     });
 }, fps);
 
@@ -115,6 +126,31 @@ loop.run();
 Vue.config.productionTip = false;
 EDITOR.version = '1.0';
 EDITOR.entities = ECS.entities;
+EDITOR.entities_high_lighted_counter = 0;
+EDITOR.addEntityAction('high_light_on', function (entity) {
+    if(ECS.entity.has(entity) && ECS.system.hasSystem('editor.high_light'))
+    {
+        let system = ECS.system.getSystem('editor.high_light');
+        ECS.system.disableSystem('raycaster');
+        system.highLight(entity);
+        EDITOR.entities_high_lighted_counter++;
+    }
+});
+EDITOR.addEntityAction('high_light_off', function (entity) {
+    if(ECS.entity.has(entity) && ECS.system.hasSystem('editor.high_light'))
+    {
+        let system = ECS.system.getSystem('editor.high_light');
+        system.undoHighLight(entity);
+        EDITOR.entities_high_lighted_counter--;
+        // Can highlight many entities and when all unhighlighted, then
+        // enable raycaster!
+        if(EDITOR.entities_high_lighted_counter <= 0) {
+            ECS.system.enableSystem('raycaster');
+            EDITOR.entities_high_lighted_counter = 0;
+        }
+    }
+});
+
 const p = new Vue({
     el: '#left-panel',
     template: '<LeftPanel/>',
