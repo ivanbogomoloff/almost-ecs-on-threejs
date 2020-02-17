@@ -20,6 +20,7 @@ import {Config} from "./Game/Config";
 import Vue from 'vue/dist/vue.esm'
 import {EDITOR} from "./Editor/EDITOR";
 import LeftPanel from './Editor/LeftPanel.vue'
+import RightPanel from './Editor/RightPanel.vue'
 import {HighLightSystem} from "./Editor/System/HighLightSystem";
 
 let userEntity = ECS.entity.create('user');
@@ -127,6 +128,19 @@ Vue.config.productionTip = false;
 EDITOR.version = '1.0';
 EDITOR.entities = ECS.entities;
 EDITOR.entities_high_lighted_counter = 0;
+
+EDITOR.vue = new Vue({
+    el: '#editor',
+    data: {
+        showRightPanel: false,
+        selectedEntity: null
+    },
+    components: {
+        'left-panel': LeftPanel,
+        'right-panel': RightPanel
+    }
+});
+
 EDITOR.addEntityAction('high_light_on', function (entity) {
     if(ECS.entity.has(entity) && ECS.system.hasSystem('editor.high_light'))
     {
@@ -151,10 +165,7 @@ EDITOR.addEntityAction('high_light_off', function (entity) {
     }
 });
 
-const p = new Vue({
-    el: '#left-panel',
-    template: '<LeftPanel/>',
-    components: {
-        LeftPanel
-    }
+EDITOR.addEntityAction('move', function (entity) {
+    EDITOR.vue.showRightPanel = true;
+    EDITOR.vue.selectedEntity = entity;
 });

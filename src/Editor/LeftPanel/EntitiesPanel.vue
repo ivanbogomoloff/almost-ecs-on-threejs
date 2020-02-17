@@ -52,8 +52,12 @@
 			            case EDITOR.ENTITY_ACTION_HIGHLIGHT:
 							EDITOR.entityAction('high_light_on', this.selectedEntity);
 			                break;
-			            case EDITOR.UNDO_ENTITY_ACTION_HIGHLIGHT:
+			            case EDITOR.ENTITY_ACTION_HIGHLIGHT_OFF:
                             EDITOR.entityAction('high_light_off', this.selectedEntity);
+			                //this.selectedEntity = '';
+                            break;
+			            case EDITOR.ENTITY_ACTION_MOVE:
+							EDITOR.entityAction('move', this.selectedEntity);
 			                break;
                     }
 	            }

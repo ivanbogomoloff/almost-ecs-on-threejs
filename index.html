@@ -26,7 +26,14 @@
 	</style>
 </head>
 <body>
-<div id="left-panel"></div>
+<div id="editor">
+	<left-panel></left-panel>
+	<right-panel
+		v-bind:show="showRightPanel"
+		v-bind:entity="selectedEntity"
+	>
+	</right-panel>
+</div>
 <div id="render"></div>
 <script src="./app.bundle.js"></script>
 <script src="./editor.bundle.js"></script>
