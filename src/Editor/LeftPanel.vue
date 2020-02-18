@@ -1,33 +1,9 @@
 <template>
 	<div id="controls-left" style="max-height: 800px; overflow: auto">
 		<h1>Editor version {{ version }}</h1>
-		<div class="controls-panel">
-			<EntitiesPanel
-				v-on:entity-changed="entityPanel_onEntityChanged"
-				v-on:entity-action-changed="entityPanel_onEntityActionChanged"
-			/>
-			<ComponentsPanel />
-			<SystemsPanel/>
-			<hr>
-			<div>
-				<div id="controls-config" class="controls-panel-container">
-					<h2>Config data</h2>
-					<table>
-						<tr>
-							<td>FPS</td>
-							<td>{{ config.FPS }}</td>
-						</tr>
-					</table>
-				</div>
-				<hr>
-			</div>
-		</div>
 	</div>
 </template>
 <script>
-	import EntitiesPanel from './LeftPanel/EntitiesPanel.vue'
-	import ComponentsPanel from './LeftPanel/ComponentsPanel.vue'
-	import SystemsPanel from './LeftPanel/SystemsPanel.vue'
 	import {Config} from "../Game/Config";
     import {EDITOR} from "./EDITOR";
 
@@ -39,18 +15,7 @@
 	            version: EDITOR.version
             };
 	    },
-	    methods: {
-            entityPanel_onEntityChanged: function () {
-				this.$emit('left-panel-entity-changed')
-            },
-		    entityPanel_onEntityActionChanged: function () {
-			    this.$emit('left-panel-entity-action-changed');
-            }
-	    },
         components: {
-            EntitiesPanel,
-            ComponentsPanel,
-            SystemsPanel
         }
     }
 </script>
@@ -58,7 +23,6 @@
 	#controls-left {
 		position: absolute;
 		width: 200px;
-		height: 100%;
 		background: black;
 		opacity: 0.6;
 		color: white;
@@ -79,7 +43,6 @@
 	}
 
 	.controls-panel-container {
-		max-height: 150px;
 		overflow: auto;
 	}
 	a {

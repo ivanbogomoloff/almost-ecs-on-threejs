@@ -27,17 +27,8 @@
 </head>
 <body>
 <div id="editor">
-	<left-panel
-		v-on:left-panel-entity-changed="entityPanel_onEntityChanged"
-		v-on:left-panel-entity-action-changed="entityPanel_onEntityActionChanged"
-	></left-panel>
-	<right-panel
-		v-bind:show="showRightPanel"
-		v-bind:entity="selectedEntity"
-		v-bind:entity_action="entityAction"
-		v-bind:entity_action_show="entityActionShow"
-	>
-	</right-panel>
+	<left-panel></left-panel>
+	<right-panel></right-panel>
 </div>
 <div id="render"></div>
 <script src="./app.bundle.js"></script>

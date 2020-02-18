@@ -129,32 +129,6 @@ EDITOR.version = '1.0';
 EDITOR.entities = ECS.entities;
 EDITOR.entities_high_lighted_counter = 0;
 
-EDITOR.vue = new Vue({
-    el: '#editor',
-    data: {
-        showRightPanel: false,
-        entityActionShow: false,
-        selectedEntity: null,
-        entityAction: ''
-    },
-    methods: {
-        entityPanel_onEntityChanged: function () {
-            EDITOR.vue.showRightPanel   = false;
-            EDITOR.vue.entityActionShow = false;
-            this.selectedEntity = '';
-        },
-        entityPanel_onEntityActionChanged: function () {
-            
-            console.log('test');
-            console.log(this.entityAction);
-        }
-    },
-    components: {
-        'left-panel': LeftPanel,
-        'right-panel': RightPanel
-    }
-});
-
 EDITOR.addEntityAction('high_light_on', function (entity) {
     if(ECS.entity.has(entity) && ECS.system.hasSystem('editor.high_light'))
     {
@@ -180,8 +154,15 @@ EDITOR.addEntityAction('high_light_off', function (entity) {
 });
 
 EDITOR.addEntityAction('move', function (entity) {
-    EDITOR.vue.entityActionShow = true;
-    EDITOR.vue.showRightPanel   = true;
-    EDITOR.vue.entityAction     = 'move';
-    EDITOR.vue.selectedEntity   = entity;
+
+});
+
+EDITOR.vue = new Vue({
+    el: '#editor',
+    data: {
+    },
+    components: {
+        'left-panel': LeftPanel,
+        'right-panel': RightPanel
+    }
 });
