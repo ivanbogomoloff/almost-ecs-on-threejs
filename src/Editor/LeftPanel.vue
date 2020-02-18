@@ -2,7 +2,7 @@
 	<div id="controls-left" style="max-height: 800px; overflow: auto">
 		<h1>Editor version {{ version }}</h1>
 		<div class="controls-panel">
-			<EntitiesPanel />
+			<EntitiesPanel v-on:entity-changed="onEntityChanged" />
 			<ComponentsPanel />
 			<SystemsPanel/>
 			<hr>
@@ -35,6 +35,11 @@
                 config: Config,
 	            version: EDITOR.version
             };
+	    },
+	    methods: {
+            onEntityChanged: function () {
+	            alert('1');
+            }
 	    },
         components: {
             EntitiesPanel,

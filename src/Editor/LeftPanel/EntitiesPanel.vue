@@ -40,13 +40,14 @@
         },
 	    watch: {
             selectedEntity: function (v) {
-                console.log('[EDITOR] on entity select = '+v);
+                //console.log('[EDITOR] on entity select = '+v);
                 this.selectEntityAction = '';
+                this.$emit('entityChanged');
             },
             selectEntityAction: function (v) {
 	            if(this.selectedEntity != '' && v)
 	            {
-                    console.log('[EDITOR] on entity action '+v+' select = '+this.selectedEntity);
+                    //console.log('[EDITOR] on entity action '+v+' select = '+this.selectedEntity);
                     // DO SOME ACTION WITH ENTITY
 		            switch (v) {
 			            case EDITOR.ENTITY_ACTION_HIGHLIGHT:

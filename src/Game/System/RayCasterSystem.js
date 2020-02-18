@@ -117,7 +117,7 @@ class RayCasterSystem {
     }
 
     disable(){
-        this._needRestore = true;
+        this._disabled = true;
     }
 
     enable(){
