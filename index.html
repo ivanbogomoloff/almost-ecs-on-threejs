@@ -28,8 +28,8 @@
 <body>
 <div id="editor">
 	<left-panel
-
-
+		v-on:left-panel-entity-changed="entityPanel_onEntityChanged"
+		v-on:left-panel-entity-action-changed="entityPanel_onEntityActionChanged"
 	></left-panel>
 	<right-panel
 		v-bind:show="showRightPanel"

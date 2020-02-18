@@ -137,6 +137,18 @@ EDITOR.vue = new Vue({
         selectedEntity: null,
         entityAction: ''
     },
+    methods: {
+        entityPanel_onEntityChanged: function () {
+            EDITOR.vue.showRightPanel   = false;
+            EDITOR.vue.entityActionShow = false;
+            this.selectedEntity = '';
+        },
+        entityPanel_onEntityActionChanged: function () {
+            
+            console.log('test');
+            console.log(this.entityAction);
+        }
+    },
     components: {
         'left-panel': LeftPanel,
         'right-panel': RightPanel

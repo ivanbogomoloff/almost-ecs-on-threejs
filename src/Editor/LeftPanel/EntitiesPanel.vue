@@ -42,7 +42,7 @@
             selectedEntity: function (v) {
                 //console.log('[EDITOR] on entity select = '+v);
                 this.selectEntityAction = '';
-                this.$emit('entityChanged');
+                this.$emit('entity-changed');
             },
             selectEntityAction: function (v) {
 	            if(this.selectedEntity != '' && v)
@@ -62,6 +62,8 @@
 			                break;
                     }
 	            }
+
+                this.$emit('entity-action-changed');
             }
         }
     }

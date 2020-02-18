@@ -2,7 +2,10 @@
 	<div id="controls-left" style="max-height: 800px; overflow: auto">
 		<h1>Editor version {{ version }}</h1>
 		<div class="controls-panel">
-			<EntitiesPanel v-on:entity-changed="onEntityChanged" />
+			<EntitiesPanel
+				v-on:entity-changed="entityPanel_onEntityChanged"
+				v-on:entity-action-changed="entityPanel_onEntityActionChanged"
+			/>
 			<ComponentsPanel />
 			<SystemsPanel/>
 			<hr>
@@ -37,8 +40,11 @@
             };
 	    },
 	    methods: {
-            onEntityChanged: function () {
-	            alert('1');
+            entityPanel_onEntityChanged: function () {
+				this.$emit('left-panel-entity-changed')
+            },
+		    entityPanel_onEntityActionChanged: function () {
+			    this.$emit('left-panel-entity-action-changed');
             }
 	    },
         components: {
