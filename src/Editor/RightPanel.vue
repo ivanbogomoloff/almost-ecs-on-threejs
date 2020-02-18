@@ -1,43 +1,28 @@
 <template>
 	<div v-if="show" id="controls-right" style="max-height: 800px; overflow: auto">
-		<h1>Right menu</h1>
-		<div class="controls-panel">
-			<div>
-				<h2>Entity controls {{ entity }}</h2>
-				<div id="controls-left_entities-container" class="controls-panel-container">
-					<table>
-						<tr>
-							<td width="80%">
-								test
-							</td>
-							<td width="20%">
-								test
-							</td>
-						</tr>
-					</table>
-				</div>
-				<hr>
-			</div>
-		</div>
+		<EntityAction v-bind:show="entity_action_show" v-bind:entity="entity" v-bind:action="entity_action" />
 	</div>
 </template>
 <script>
     import {Config} from "../Game/Config";
     import {EDITOR} from "./EDITOR";
+    import EntityAction from './RightPanel/EntityAction.vue';
 
     export default {
         name: 'RightPanel',
 	    props: {
             show: false,
-		    entity: ''
+            entity_action_show: false,
+		    entity: '',
+            entity_action: ''
 	    },
 	    watch: {
-            show: function (v) {
-				alert(this.entity)
+		    entity: function (v) {
+
             }
 	    },
         components: {
-
+            EntityAction
         }
     }
 </script>

@@ -133,7 +133,9 @@ EDITOR.vue = new Vue({
     el: '#editor',
     data: {
         showRightPanel: false,
-        selectedEntity: null
+        entityActionShow: false,
+        selectedEntity: null,
+        entityAction: ''
     },
     components: {
         'left-panel': LeftPanel,
@@ -166,6 +168,8 @@ EDITOR.addEntityAction('high_light_off', function (entity) {
 });
 
 EDITOR.addEntityAction('move', function (entity) {
-    EDITOR.vue.showRightPanel = true;
-    EDITOR.vue.selectedEntity = entity;
+    EDITOR.vue.entityActionShow = true;
+    EDITOR.vue.showRightPanel   = true;
+    EDITOR.vue.entityAction     = 'move';
+    EDITOR.vue.selectedEntity   = entity;
 });
