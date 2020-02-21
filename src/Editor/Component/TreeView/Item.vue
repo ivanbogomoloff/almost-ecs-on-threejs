@@ -14,6 +14,7 @@
 				:item="child"
 				@make-folder="$emit('make-folder', $event)"
 				@add-item="$emit('add-item', $event)"
+				@editor-action-selected="$emit('editor-action-selected', $event)"
 			></tree-item>
 			<li class="add" @click="$emit('add-item', item)">+</li>
 		</ul>
@@ -53,7 +54,7 @@
                     if(this.item.selected)
                     {
                         if(this.item.hasOwnProperty('editor_action')) {
-                            //this.$emit('editor_action', this.item);
+                            this.$emit('editor-action-selected', this.item);
                         }
                     }
                 }

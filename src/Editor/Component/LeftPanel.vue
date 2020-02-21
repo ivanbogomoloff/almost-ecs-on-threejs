@@ -5,7 +5,7 @@
 			<div id="controls-left_entities-container" class="controls-panel-container">
 				<tree-view
 					v-bind:tree_data="treeData"
-
+					v-on:onEditorActionSelected="onEditorActionSelected"
 				></tree-view>
 			</div>
 			<hr>
@@ -26,6 +26,15 @@
 	            version: EDITOR.version,
                 treeData: EDITOR.tree.entities
             };
+	    },
+	    methods: {
+            onEditorActionSelected: function (editorTreeItemData) {
+                //alert(editorTreeItemData.editor_action + editorTreeItemData.entity_id);
+                EDITOR.right_panel.addEntityActions(
+                    editorTreeItemData.entity_id,
+                    editorTreeItemData.editor_action
+                );
+            }
 	    },
         components: {
             'tree-view': TreeView

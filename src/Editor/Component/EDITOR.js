@@ -21,7 +21,8 @@ const EDITOR = {
                         {
                             name: 'Actions',
                             editor_action: EDITOR.ACTION_SHOW_ENTITY_ACTIONS,
-                            selected: false
+                            selected: false,
+                            entity_id: entityData.entity_id
                         },
                         {
                             name: 'Components',
@@ -39,6 +40,15 @@ const EDITOR = {
                 name: 'Entities ('+EDITOR.entitiesCount()+')',
                 children: entitiesArr
             }
+        }
+    },
+    right_panel: {
+        _entityActions: [],
+        addEntityActions: function (entityId, actionId) {
+            EDITOR.right_panel._entityActions.push({
+                entity_id: entityId,
+                action_id: actionId
+            });
         }
     },
     entitiesCount: function () {

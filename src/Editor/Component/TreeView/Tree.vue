@@ -5,6 +5,7 @@
 			:item="tree_data"
 			@make-folder="makeFolder"
 			@add-item="addItem"
+			@editor-action-selected="onEditorActionSelected"
 		></tree-item>
 	</ul>
 </template>
@@ -30,6 +31,9 @@
                 item.children.push({
                     name: 'new stuff'
                 });
+            },
+            onEditorActionSelected: function (data) {
+                this.$emit('onEditorActionSelected', data);
             }
         },
         components: {
