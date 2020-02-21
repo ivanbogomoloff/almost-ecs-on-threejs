@@ -3,6 +3,9 @@ const EDITOR = {
     version: 1.0,
     entities: [],
     entities_high_lighted_counter: 0,
+    // Editor actions
+    ACTION_SHOW_ENTITY_ACTIONS: 1,
+    //Entity actions
     ENTITY_ACTION_HIGHLIGHT: 1,
     ENTITY_ACTION_HIGHLIGHT_OFF: 2,
     ENTITY_ACTION_MOVE: 3,
@@ -15,7 +18,9 @@ const EDITOR = {
                     name: entityData.entity_id,
                     children: [
                         {
-                            name: 'Actions'
+                            name: 'Actions',
+                            editor_action: EDITOR.ACTION_SHOW_ENTITY_ACTIONS,
+                            selected: false
                         },
                         {
                             name: 'Components',

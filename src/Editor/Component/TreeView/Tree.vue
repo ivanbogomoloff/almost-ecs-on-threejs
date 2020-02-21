@@ -13,35 +13,6 @@
     import Vue from 'vue/dist/vue.esm'
 	import TreeItem from './Item.vue';
 
-    // demo data
-    // let treeData = {
-    //     name: 'My Tree',
-    //     children: [
-    //         { name: 'hello' },
-    //         { name: 'wat' },
-    //         {
-    //             name: 'child folder',
-    //             children: [
-    //                 {
-    //                     name: 'child folder',
-    //                     children: [
-    //                         { name: 'hello' },
-    //                         { name: 'wat' }
-    //                     ]
-    //                 },
-    //                 { name: 'hello' },
-    //                 { name: 'wat' },
-    //                 {
-    //                     name: 'child folder',
-    //                     children: [
-    //                         { name: 'hello' },
-    //                         { name: 'wat' }
-    //                     ]
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // };
 
     export default {
         props: {
@@ -72,6 +43,11 @@
 	}
 	.bold {
 		font-weight: bold;
+	}
+	.selected {
+		color: #ffffff;
+		border: 1px solid #ffe6e6;
+		width: 90%;
 	}
 	ul {
 		padding-left: 1em;

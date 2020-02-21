@@ -1,7 +1,7 @@
 <template>
 	<li>
 		<div
-			:class="{bold: isFolder}"
+			:class="{bold: isFolder, selected: isSelected}"
 			@click="toggle">
 			{{ item.name }}
 			<span v-if="isFolder">[{{ isOpen ? '-' : '+' }}]</span>
@@ -32,15 +32,30 @@
             }
         },
         computed: {
+            isSelected: function(){
+                return this.item.hasOwnProperty('selected')
+	                && this.item.selected === true;
+            },
             isFolder: function () {
                 return this.item.children &&
                     this.item.children.length
             }
         },
+
         methods: {
             toggle: function () {
                 if (this.isFolder) {
                     this.isOpen = !this.isOpen
+                }
+                else if (this.item.hasOwnProperty('selected'))
+                {
+                    this.item.selected = !this.item.selected;
+                    if(this.item.selected)
+                    {
+                        if(this.item.hasOwnProperty('editor_action')) {
+                            this.$emit('editor_action', this.item);
+                        }
+                    }
                 }
             },
             /**
