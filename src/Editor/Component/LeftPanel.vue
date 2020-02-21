@@ -1,21 +1,34 @@
 <template>
 	<div id="controls-left" style="max-height: 800px; overflow: auto">
 		<h1>Editor version {{ version }}</h1>
+		<div class="controls-panel">
+			<div id="controls-left_entities-container" class="controls-panel-container">
+				<tree-view
+					v-bind:tree_data="treeData"
+
+				></tree-view>
+			</div>
+			<hr>
+		</div>
 	</div>
+
 </template>
 <script>
-	import {Config} from "../Game/Config";
-    import {EDITOR} from "./EDITOR";
+	import {Config} from "../../Game/Config";
+    import {EDITOR} from "./../Component/EDITOR";
+    import TreeView from "./TreeView/Tree.vue";
 
     export default {
         name: 'LeftPanel',
 	    data: function(){
             return {
                 config: Config,
-	            version: EDITOR.version
+	            version: EDITOR.version,
+                treeData: EDITOR.tree.entities()
             };
 	    },
         components: {
+            'tree-view': TreeView
         }
     }
 </script>

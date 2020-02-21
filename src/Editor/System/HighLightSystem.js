@@ -1,4 +1,6 @@
 import {CubeDrawComponent} from "../../Game/Component/Drawable/CubeDrawComponent";
+import {EDITOR} from "../Component/EDITOR";
+import {ECS} from "../../ECS/ECS";
 
 class HighLightSystem
 {
@@ -31,6 +33,30 @@ class HighLightSystem
                 });
             });
         }
+
+        EDITOR.addEntityAction('high_light_on', function (entity) {
+            if(ECS.entity.has(entity) && ECS.system.hasSystem('editor.high_light'))
+            {
+                let system = ECS.system.getSystem('editor.high_light');
+                ECS.system.disableSystem('raycaster');
+                system.highLight(entity);
+                EDITOR.entities_high_lighted_counter++;
+            }
+        });
+        EDITOR.addEntityAction('high_light_off', function (entity) {
+            if(ECS.entity.has(entity) && ECS.system.hasSystem('editor.high_light'))
+            {
+                let system = ECS.system.getSystem('editor.high_light');
+                system.undoHighLight(entity);
+                EDITOR.entities_high_lighted_counter--;
+                // Can highlight many entities and when all unhighlighted, then
+                // enable raycaster!
+                if(EDITOR.entities_high_lighted_counter <= 0) {
+                    ECS.system.enableSystem('raycaster');
+                    EDITOR.entities_high_lighted_counter = 0;
+                }
+            }
+        });
     }
 
     undoHighLight(entity) {
