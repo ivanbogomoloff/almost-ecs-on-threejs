@@ -2,8 +2,7 @@
 	<li>
 		<div
 			:class="{bold: isFolder}"
-			@click="toggle"
-			@dblclick="makeFolder">
+			@click="toggle">
 			{{ item.name }}
 			<span v-if="isFolder">[{{ isOpen ? '-' : '+' }}]</span>
 		</div>
@@ -21,6 +20,7 @@
 	</li>
 </template>
 <script>
+	// FROM: https://ru.vuejs.org/v2/examples/tree-view.html
 	export default {
 	    name: 'tree-item',
         props: {
@@ -43,6 +43,10 @@
                     this.isOpen = !this.isOpen
                 }
             },
+            /**
+             * This method allow to create sub tree in item by dbclicking
+             * If need to create make subtrees add @ondbclick and invoke this makeFolder
+             */
             makeFolder: function () {
                 if (!this.isFolder) {
                     this.$emit('make-folder', this.item);

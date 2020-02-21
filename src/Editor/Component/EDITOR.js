@@ -15,6 +15,9 @@ const EDITOR = {
                     name: entityData.entity_id,
                     children: [
                         {
+                            name: 'Actions'
+                        },
+                        {
                             name: 'Components',
                             children: entityData.entity_components
                         },
