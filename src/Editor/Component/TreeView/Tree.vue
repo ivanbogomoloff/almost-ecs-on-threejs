@@ -6,6 +6,7 @@
 			@make-folder="makeFolder"
 			@add-item="addItem"
 			@editor-action-selected="onEditorActionSelected"
+			@editor-action-de-selected="onEditorActionDeSelected"
 		></tree-item>
 	</ul>
 </template>
@@ -34,6 +35,9 @@
             },
             onEditorActionSelected: function (data) {
                 this.$emit('onEditorActionSelected', data);
+            },
+            onEditorActionDeSelected: function (data) {
+                this.$emit('onEditorActionDeSelected', data);
             }
         },
         components: {

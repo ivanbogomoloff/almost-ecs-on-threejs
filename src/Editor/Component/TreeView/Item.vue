@@ -15,6 +15,7 @@
 				@make-folder="$emit('make-folder', $event)"
 				@add-item="$emit('add-item', $event)"
 				@editor-action-selected="$emit('editor-action-selected', $event)"
+				@editor-action-de-selected="$emit('editor-action-de-selected', $event)"
 			></tree-item>
 			<li class="add" @click="$emit('add-item', item)">+</li>
 		</ul>
@@ -55,6 +56,11 @@
                     {
                         if(this.item.hasOwnProperty('editor_action')) {
                             this.$emit('editor-action-selected', this.item);
+                        }
+                    }
+                    else {
+                        if(this.item.hasOwnProperty('editor_action')) {
+                            this.$emit('editor-action-de-selected', this.item);
                         }
                     }
                 }

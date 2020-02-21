@@ -1,17 +1,18 @@
 <template>
-		<div v-if="show" id="controls-right" style="max-height: 800px; overflow: auto">
+		<div id="controls-right" style="max-height: 800px; overflow: auto">
 			<entity-actions
-				v-bind:show="showEntityActions"
+				v-bind:actions="rightPanelEntityActions"
 			></entity-actions>
 		</div>
 </template>
 <script>
 	import EntityActionsPanel from './RightPanel/EntityActionsPanel.vue';
+    import {EDITOR} from "./EDITOR";
 
     export default {
         props: {
             show: Boolean,
-            showEntityActions: Boolean
+            rightPanelEntityActions: Array
         },
         name: 'RightPanel',
         components: {

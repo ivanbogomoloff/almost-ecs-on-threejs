@@ -6,6 +6,7 @@
 				<tree-view
 					v-bind:tree_data="treeData"
 					v-on:onEditorActionSelected="onEditorActionSelected"
+					v-on:onEditorActionDeSelected="onEditorActionDeSelected"
 				></tree-view>
 			</div>
 			<hr>
@@ -14,26 +15,21 @@
 
 </template>
 <script>
-	import {Config} from "../../Game/Config";
-    import {EDITOR} from "./../Component/EDITOR";
     import TreeView from "./TreeView/Tree.vue";
 
     export default {
         name: 'LeftPanel',
-	    data: function(){
-            return {
-                config: Config,
-	            version: EDITOR.version,
-                treeData: EDITOR.tree.entities
-            };
-	    },
+	    props: {
+            config: Object,
+            version: '',
+            treeData: Object
+        },
 	    methods: {
             onEditorActionSelected: function (editorTreeItemData) {
-                //alert(editorTreeItemData.editor_action + editorTreeItemData.entity_id);
-                EDITOR.right_panel.addEntityActions(
-                    editorTreeItemData.entity_id,
-                    editorTreeItemData.editor_action
-                );
+                this.$emit('onEditorActionSelected', editorTreeItemData);
+            },
+            onEditorActionDeSelected: function (editorTreeItemData) {
+                this.$emit('onEditorActionDeSelected', editorTreeItemData);
             }
 	    },
         components: {
