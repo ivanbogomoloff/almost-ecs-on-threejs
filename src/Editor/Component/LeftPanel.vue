@@ -24,7 +24,7 @@
             return {
                 config: Config,
 	            version: EDITOR.version,
-                treeData: EDITOR.tree.entities()
+                treeData: EDITOR.tree.entities
             };
 	    },
         components: {

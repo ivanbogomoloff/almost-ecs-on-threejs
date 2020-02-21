@@ -18,7 +18,7 @@ import {MovementSystem} from "./Game/System/MovementSystem";
 import {Config} from "./Game/Config";
 // Editor
 import {HighLightSystem} from "./Editor/System/HighLightSystem";
-import {VueSystem} from "./Editor/System/VueSystem";
+import {UiSystem} from "./Editor/System/UiSystem";
 import {EditorSystem} from "./Editor/System/EditorSystem";
 
 let userEntity = ECS.entity.create('user');
@@ -87,13 +87,13 @@ ECS.system.registerEntity('render', lightEntity);
 ECS.system.registerEntity('render', cubeEntity);
 ECS.system.registerEntity('render', cubeEntity2);
 
-let movementSystem = new MovementSystem(renderingSystem);
+let movementSystem = new MovementSystem(ECS.system.getSystem('render'));
 ECS.system.add('movement', movementSystem);
 
 ECS.system.registerEntity('movement', cubeEntity);
 ECS.system.registerEntity('movement', cubeEntity2);
 
-let rayCasterSystem = new RayCasterSystem(renderingSystem);
+let rayCasterSystem = new RayCasterSystem(ECS.system.getSystem('render'));
 ECS.system.add('raycaster', rayCasterSystem);
 ECS.system.registerEntity('raycaster', cubeEntity);
 ECS.system.registerEntity('raycaster', cubeEntity2);
@@ -106,9 +106,11 @@ ECS.system.registerEntity('editor', cubeEntity);
 ECS.system.registerEntity('editor', cubeEntity2);
 ECS.system.registerEntity('editor', mapEntity);
 
-ECS.system.add('editor.ui', new VueSystem());
+// We need call dependencies from ECS by getSystem, becase we can DISABLE/REMOVE system!
+// Best way do it in soft manner, like check IF system != null
+ECS.system.add('editor.ui', new UiSystem(ECS.system.getSystem('editor')));
 
-ECS.system.add('editor.high_light', new HighLightSystem(renderingSystem));
+ECS.system.add('editor.high_light', new HighLightSystem(ECS.system.getSystem('render')));
 ECS.system.registerEntity('editor.high_light', cubeEntity);
 ECS.system.registerEntity('editor.high_light', cubeEntity2);
 ECS.system.registerEntity('editor.high_light', mapEntity);

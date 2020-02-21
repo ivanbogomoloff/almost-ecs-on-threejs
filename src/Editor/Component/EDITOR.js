@@ -10,7 +10,8 @@ const EDITOR = {
     ENTITY_ACTION_HIGHLIGHT_OFF: 2,
     ENTITY_ACTION_MOVE: 3,
     tree: {
-        entities: function () {
+        entities: {},
+        buildEntities: function () {
             let entitiesArr = [];
 
             EDITOR.entities.forEach(function (entityData) {

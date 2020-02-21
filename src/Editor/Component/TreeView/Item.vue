@@ -53,7 +53,7 @@
                     if(this.item.selected)
                     {
                         if(this.item.hasOwnProperty('editor_action')) {
-                            this.$emit('editor_action', this.item);
+                            //this.$emit('editor_action', this.item);
                         }
                     }
                 }

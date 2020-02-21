@@ -29,6 +29,7 @@ class EditorSystem
             });
         });
 
+        EDITOR.tree.entities = EDITOR.tree.buildEntities();
     }
 
     loop(){
