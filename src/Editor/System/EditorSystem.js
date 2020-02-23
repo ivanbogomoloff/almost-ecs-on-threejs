@@ -30,6 +30,7 @@ class EditorSystem
         });
 
         EDITOR.tree.entities = EDITOR.tree.buildEntities();
+        EDITOR.entities_components = _.ECS.entities_components;
     }
 
     loop(){

@@ -14,7 +14,7 @@ function HightLightMeshComponent_perEntity(initMaterial) {
 }
 
 const HightLightMeshComponent = {
-    id: 'three_js.highlight_1',
+    id: 'highlight',
     _instances: {},
     load: function(entityId, initMaterial)
     {

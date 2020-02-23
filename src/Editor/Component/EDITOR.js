@@ -2,6 +2,7 @@
 const EDITOR = {
     version: 1.0,
     entities: [],
+    entities_components: {},
     entities_high_lighted_counter: 0,
     // Editor actions
     ACTION_SHOW_ENTITY_ACTIONS: 1,
@@ -9,6 +10,9 @@ const EDITOR = {
     ENTITY_ACTION_HIGHLIGHT: 1,
     ENTITY_ACTION_HIGHLIGHT_OFF: 2,
     ENTITY_ACTION_MOVE: 3,
+    hasEntityComponent: function(entityId, componentId) {
+        return EDITOR.entities_components[entityId][componentId];
+    },
     tree: {
         entities: {},
         buildEntities: function () {
