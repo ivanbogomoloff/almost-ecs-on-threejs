@@ -1,3 +1,7 @@
+# Editor
+
+![alt text](https://github.com/ivanbogomoloff/almost-ecs-on-threejs/blob/master/editor.png)
+
 ## Instalation
 
 ```bash
