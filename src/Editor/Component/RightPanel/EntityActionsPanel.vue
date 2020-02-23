@@ -9,17 +9,14 @@
 				</p>
 				<div class="controls-right_entity-action-item-a-list">
 					<div v-if="hasComponent(entityAction.entity_id, 'position')" class="controls-right_entity-action-control-item">
-						<position
+						<Position
 							v-bind:entity_id="entityAction.entity_id"
-						></position>
+						></Position>
 					</div>
 					<div v-if="hasComponent(entityAction.entity_id, 'highlight')" class="controls-right_entity-action-control-item">
-						<table class="entity-control-table">
-							<tr><td colspan="2">Highlight</td></tr>
-							<tr><td>OFF/ON</td><td>
-								<input type="checkbox" >
-							</td></tr>
-						</table>
+						<Highlight
+						 v-bind:entity_id="entityAction.entity_id"
+						></Highlight>
 					</div>
 				</div>
 			</div>
@@ -30,6 +27,7 @@
 <script>
 	import {EDITOR} from "../EDITOR";
     import Position from "./Position.vue";
+    import Highlight from "./Highlight.vue";
 
     export default {
         props: {
@@ -56,6 +54,7 @@
             }
         },
         components: {
+            Highlight,
             Position
 
         }
