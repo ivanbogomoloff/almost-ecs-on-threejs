@@ -99,7 +99,7 @@ class ThreeSystem {
                             let positionComponent = entity.components.filter(o => o.id === PositionComponent.id);
                             if(positionComponent.length > 0) {
                                 positionComponent = positionComponent[0];
-                                PositionComponent.init(entity.id, positionComponent.args);
+                                PositionComponent.init(systemId, entity.id, positionComponent.args);
                                 cubeInstance.object3d.position.set(
                                     positionComponent.args.x,
                                     positionComponent.args.y,

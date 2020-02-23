@@ -14,7 +14,7 @@ class MovementSystem
             entity.components.forEach(function (component) {
                 switch (component.id) {
                     case PositionComponent.id:
-                        let position = PositionComponent.init(entity.id, component.args);
+                        let position = PositionComponent.init(id, entity.id, component.args);
                         _.movable.push({entityId: entity.id, position: position});
                         break;
                 }

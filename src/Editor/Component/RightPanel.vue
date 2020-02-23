@@ -1,5 +1,5 @@
 <template>
-		<div id="controls-right" style="max-height: 800px; overflow: auto">
+		<div id="controls-right" style="max-height: 99%; overflow: auto">
 			<entity-actions
 				v-bind:actions="rightPanelEntityActions"
 			></entity-actions>

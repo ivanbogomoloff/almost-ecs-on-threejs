@@ -5,9 +5,7 @@ function Position(p) {
     this.changed = false;
 
     this.move = function () {
-        this.x += 0.05;
-        this.z += 0.03;
-        //this.changed = true;
+
     };
 
     this.isChanged = function () {
@@ -18,16 +16,34 @@ function Position(p) {
 const PositionComponent = {
     id: 'position',
     _instances: {},
-    init: function (entityId, componentParams) {
-        if(!this._instances.hasOwnProperty(entityId)) {
-            this._instances[entityId] = new Position(componentParams);
-            console.log('[component.'+this.id+'] init for ' + entityId);
+    get: function(systemId, entity) {
+        return this._instances[systemId][entity];
+    },
+    init: function (systemId, entityId, componentParams) {
+        if(!this._instances.hasOwnProperty(systemId))
+        {
+            this._instances[systemId] = {};
+        }
+
+        if(!this._instances[systemId].hasOwnProperty(entityId))
+        {
+            this._instances[systemId][entityId] = new Position(componentParams);
+            console.log('[component.'+this.id+'] init for system = '+systemId+' entity = ' + entityId);
         }
         
-        return this._instances[entityId];
+        return this._instances[systemId][entityId];
     },
-    move: function (entityId) {
-        this._instances[entityId].move();
+    move: function (systemId, entityId) {
+        this._instances[systemId][entityId].move();
+    },
+    getSystemsForEntity: function (entityId) {
+        let s = [];
+        for(let systemId in this._instances) {
+            if(this._instances[systemId].hasOwnProperty(entityId)) {
+                s.push(systemId);
+            }
+        }
+        return s;
     }
 };
 

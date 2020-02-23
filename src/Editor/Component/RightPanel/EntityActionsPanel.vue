@@ -8,15 +8,13 @@
 					{{ entityAction }}
 				</p>
 				<div class="controls-right_entity-action-item-a-list">
-					<div v-if="hasComponent(entityAction.entity_id, 'position')" class="controls-right_entity-action-item">
-						<table class="entity-control-table">
-							<tr><td colspan="2">Position</td></tr>
-							<tr><td>X:</td><td><input type="number" step="0.1"></td></tr>
-							<tr><td>Y:</td><td><input type="number" step="0.1"></td></tr>
-							<tr><td>Z:</td><td><input type="number" step="0.1"></td></tr>
-						</table>
+					<div v-if="hasComponent(entityAction.entity_id, 'position')" class="controls-right_entity-action-control-item">
+						<position
+							v-bind:entity_id="entityAction.entity_id"
+							v-bind:cmp_data="getComponentData(entityAction.entity_id, 'position')"
+						></position>
 					</div>
-					<div v-if="hasComponent(entityAction.entity_id, 'highlight')" class="controls-right_entity-action-item">
+					<div v-if="hasComponent(entityAction.entity_id, 'highlight')" class="controls-right_entity-action-control-item">
 						<table class="entity-control-table">
 							<tr><td colspan="2">Highlight</td></tr>
 							<tr><td>OFF/ON</td><td>
@@ -32,6 +30,7 @@
 </template>
 <script>
 	import {EDITOR} from "../EDITOR";
+    import Position from "./Position.vue";
 
     export default {
         props: {
@@ -50,6 +49,9 @@
 		methods: {
             hasComponent: function (entity_id, component_id) {
 				return EDITOR.hasEntityComponent(entity_id, component_id);
+            },
+            getComponentData: function (entity_id, component_id) {
+                return EDITOR.getEntityComponentData(entity_id, component_id);
             }
 		},
         computed: {
@@ -58,6 +60,7 @@
             }
         },
         components: {
+            Position
 
         }
 	}
@@ -71,5 +74,10 @@
 	}
 	.entity-control-table {
 		width: 100%;
+	}
+	.controls-right_entity-action-item {
+		border: 1px solid #c3c3c3;
+		background: #005490;
+		margin-bottom: 5px;
 	}
 </style>

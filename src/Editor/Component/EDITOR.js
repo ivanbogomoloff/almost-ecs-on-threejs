@@ -1,8 +1,10 @@
+import {PositionComponent} from "../../Game/Component/PositionComponent";
 
 const EDITOR = {
     version: 1.0,
     entities: [],
     entities_components: {},
+    entity_systems: {},
     entities_high_lighted_counter: 0,
     // Editor actions
     ACTION_SHOW_ENTITY_ACTIONS: 1,
@@ -10,8 +12,36 @@ const EDITOR = {
     ENTITY_ACTION_HIGHLIGHT: 1,
     ENTITY_ACTION_HIGHLIGHT_OFF: 2,
     ENTITY_ACTION_MOVE: 3,
-    hasEntityComponent: function(entityId, componentId) {
+    hasEntityComponent: function (entityId, componentId) {
         return EDITOR.entities_components[entityId][componentId];
+    },
+    /**
+     * Very important!
+     * Changing component data per entity will reflect data on all systems.
+     * If we want change component data only for special system, we need go to
+     * Entity -> Systems -> TargetSystem -> and change component data only for this system!
+     *
+     * @param entityId
+     * @param componentId
+     * @param systemId
+     *
+     */
+    getEntityComponentData: function (entityId, componentId, systemId) {
+        switch (componentId) {
+            case PositionComponent.id:
+                let pos = {x: 0.0, y: 0.0, z: 0.0};
+                if(systemId) {
+                    pos = PositionComponent.get(systemId, entityId);
+                }
+                return {
+                    x: pos.x,
+                    y: pos.y,
+                    z: pos.z,
+                    systems: PositionComponent.getSystemsForEntity(entityId)
+                };
+
+                break;
+        }
     },
     tree: {
         entities: {},
@@ -41,7 +71,7 @@ const EDITOR = {
             });
 
             return {
-                name: 'Entities ('+EDITOR.entitiesCount()+')',
+                name: 'Entities (' + EDITOR.entitiesCount() + ')',
                 children: entitiesArr
             }
         }
@@ -57,18 +87,18 @@ const EDITOR = {
     },
     entitiesCount: function () {
         let entitiesCount = 0;
-        for(let e in EDITOR.entities) {
+        for (let e in EDITOR.entities) {
             entitiesCount++;
         }
 
         return entitiesCount;
     },
     registeredEntityActions: {},
-    addEntityAction: function(actionName, callback) {
+    addEntityAction: function (actionName, callback) {
         this.registeredEntityActions[actionName] = callback;
     },
     entityAction: function (actionName, params) {
-        if(this.registeredEntityActions.hasOwnProperty(actionName)) {
+        if (this.registeredEntityActions.hasOwnProperty(actionName)) {
             let fn = this.registeredEntityActions[actionName];
             fn(params);
         }
