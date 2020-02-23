@@ -10,13 +10,22 @@ function Position(p) {
     this.setX = function (x) {
         this.x = x;
     };
+    this.setY = function (y) {
+        this.y = y;
+    };
+    this.setZ = function (z) {
+        this.z = z;
+    };
 
     this.move = function () {
 
     };
 
     this.isChanged = function () {
-        return this.x !== this._prev_x;
+        return this.x !== this._prev_x
+            || this.y !== this._prev_y
+            || this.z !== this._prev_z
+            ;
     };
 }
 
@@ -27,8 +36,13 @@ const PositionComponent = {
         return this._instances[systemId][entity];
     },
     changeX: function(systemId, entityId, x){
-        console.log(x);
        this.get(systemId, entityId).setX(x);
+    },
+    changeY: function(systemId, entityId, y){
+        this.get(systemId, entityId).setY(y);
+    },
+    changeZ: function(systemId, entityId, z){
+        this.get(systemId, entityId).setZ(z);
     },
     init: function (systemId, entityId, componentParams) {
         if(!this._instances.hasOwnProperty(systemId))
