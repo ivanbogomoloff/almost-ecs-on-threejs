@@ -20,6 +20,7 @@ import {Config} from "./Game/Config";
 import {HighLightSystem} from "./Editor/System/HighLightSystem";
 import {UiSystem} from "./Editor/System/UiSystem";
 import {EditorSystem} from "./Editor/System/EditorSystem";
+import {PositionSystem} from "./Editor/System/PositionSystem";
 
 let userEntity = ECS.entity.create('user');
 ECS.entity.addComponent(userEntity, ECS.component.create(CameraComponent.id));
@@ -114,6 +115,10 @@ ECS.system.add('editor.high_light', new HighLightSystem(ECS.system.getSystem('re
 ECS.system.registerEntity('editor.high_light', cubeEntity);
 ECS.system.registerEntity('editor.high_light', cubeEntity2);
 ECS.system.registerEntity('editor.high_light', mapEntity);
+
+ECS.system.add('editor.position', new PositionSystem());
+ECS.system.registerEntity('editor.position', cubeEntity);
+ECS.system.registerEntity('editor.position', cubeEntity2);
 
 ECS.system.init();
 

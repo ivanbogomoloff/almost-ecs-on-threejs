@@ -35,14 +35,13 @@
 </template>
 <script>
     import {EDITOR} from "../EDITOR";
-    import {PositionComponent} from "../../../Game/Component/PositionComponent";
 
     export default {
         props: {
             entity_id: String
         },
         data: function () {
-            let systems = PositionComponent.getSystemsForEntity(this.entity_id);
+            let systems = EDITOR.entityAction('position.get_systems_for_entity', this.entity_id);
             return {
                 systems: systems,
 	            show: []
@@ -57,7 +56,7 @@
                 return document.getElementById('position_'+coord+'_'+this.entity_id+'_'+sid);
 	        },
             onClick: function(event, systemId, coord, dir){
-                let pos = PositionComponent.get(systemId, this.entity_id);
+                let pos = EDITOR.entityAction('position.get', [systemId,this.entity_id]);
                 let step = 1;
                 switch (coord) {
 	                case 'x':
@@ -73,32 +72,22 @@
 
             },
             onChangeX: function (event, systemId, valueX) {
-                let val = valueX !== null ? valueX : event.target.value.replace(/,/, '.');
-                PositionComponent.changeX(systemId, this.entity_id, val);
+                let val = valueX !== null ? valueX : event.target.value.replace(/,/, '.'); //todo fix this
+                EDITOR.entityAction('position.change_x', [systemId,this.entity_id, val]);
 	            this.findById(systemId,'x').value = val;
             },
             onChangeY: function (event, systemId, valueY) {
-                let val = valueY !== null ? valueY : event.target.value.replace(/,/, '.');
-                PositionComponent.changeY(systemId, this.entity_id, val);
+                let val = valueY !== null ? valueY : event.target.value.replace(/,/, '.'); //todo fix this
+                EDITOR.entityAction('position.change_y', [systemId,this.entity_id, val]);
                 this.findById(systemId,'y').value = val;
             },
             onChangeZ: function (event, systemId, valueZ) {
-                let val = valueZ !== null ? valueZ : event.target.value.replace(/,/, '.');
-                PositionComponent.changeZ(systemId, this.entity_id, val);
+                let val = valueZ !== null ? valueZ : event.target.value.replace(/,/, '.'); //todo fix this
+                EDITOR.entityAction('position.change_z', [systemId,this.entity_id, val]);
                 this.findById(systemId,'z').value = val;
             },
             getPositionForSystem: function (systemId, coordinate) {
-                let pos = {x: 0.0, y: 0.0, z: 0.0};
-                if (systemId) {
-                    pos = PositionComponent.get(systemId, this.entity_id);
-                }
-                let data = {
-                    x: pos.x,
-                    y: pos.y,
-                    z: pos.z
-                };
-
-                return data[coordinate];
+                return EDITOR.entityAction('position.get_for_system', [systemId, this.entity_id, coordinate]);
             }
         },
         components: {}
