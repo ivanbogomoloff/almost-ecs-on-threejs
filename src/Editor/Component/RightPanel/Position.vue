@@ -57,32 +57,39 @@
 	        },
             onClick: function(event, systemId, coord, dir){
                 let pos = EDITOR.entityAction('position.get', [systemId,this.entity_id]);
-                let step = 1;
+                let step = EDITOR.entityAction('position.get_step_value', [systemId, this.entity_id]);
+                let e = {target: {value: ''}};
                 switch (coord) {
 	                case 'x':
-                        this.onChangeX(null, systemId, dir === '+' ? pos.x + step : pos.x - step);
-	                    break;
+                        e.target.value = ("") + (dir === '+' ? pos.x + step : pos.x - step);
+                        this.onChangeX(e, systemId);
+                        break;
                     case 'y':
-                        this.onChangeY(null, systemId, dir === '+' ? pos.y + step : pos.y - step);
+                        e.target.value = ("") + (dir === '+' ? pos.y + step : pos.y - step);
+                        this.onChangeY(e, systemId);
                         break;
                     case 'z':
-                        this.onChangeZ(null, systemId, dir === '+' ? pos.z + step : pos.z - step);
+                        e.target.value = ("") + (dir === '+' ? pos.z + step : pos.z - step);
+                        this.onChangeZ(e, systemId);
                         break;
                 }
 
             },
-            onChangeX: function (event, systemId, valueX) {
-                let val = valueX !== null ? valueX : event.target.value.replace(/,/, '.'); //todo fix this
+            onChangeX: function (event, systemId) {
+                //TODO fix to model
+                let val = new Number(event.target.value.replace(/,/ig, '.'));
                 EDITOR.entityAction('position.change_x', [systemId,this.entity_id, val]);
 	            this.findById(systemId,'x').value = val;
             },
-            onChangeY: function (event, systemId, valueY) {
-                let val = valueY !== null ? valueY : event.target.value.replace(/,/, '.'); //todo fix this
+            onChangeY: function (event, systemId) {
+                //TODO fix to model
+                let val = new Number(event.target.value.replace(/,/ig, '.'));
                 EDITOR.entityAction('position.change_y', [systemId,this.entity_id, val]);
                 this.findById(systemId,'y').value = val;
             },
-            onChangeZ: function (event, systemId, valueZ) {
-                let val = valueZ !== null ? valueZ : event.target.value.replace(/,/, '.'); //todo fix this
+            onChangeZ: function (event, systemId) {
+                //TODO fix to model
+                let val = new Number(event.target.value.replace(/,/ig, '.'));
                 EDITOR.entityAction('position.change_z', [systemId,this.entity_id, val]);
                 this.findById(systemId,'z').value = val;
             },

@@ -5,6 +5,13 @@ class PositionSystem
 {
     init(id, entities)
     {
+        EDITOR.addEntityAction('position.get_step_value', function (params) {
+            let systemId = params[0];
+            let entity_id = params[1];
+
+            return 0.1;
+        });
+
         EDITOR.addEntityAction('position.get', function (params) {
             let systemId = params[0];
             let entity_id = params[1];
@@ -32,7 +39,12 @@ class PositionSystem
             return data[coordinate]
         });
         EDITOR.addEntityAction('position.get_systems_for_entity', function (entityId) {
-            return PositionComponent.getSystemsForEntity(entityId);
+            let s = PositionComponent.getSystemsForEntity(entityId);
+            // Ignore render system
+            s = s.filter(function (s) {
+               return s !== 'render';
+            });
+            return s;
         });
 
         EDITOR.addEntityAction('position.change_x', function (params) {
