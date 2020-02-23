@@ -12,12 +12,9 @@
 				v-for="(child, index) in item.children"
 				:key="index"
 				:item="child"
-				@make-folder="$emit('make-folder', $event)"
-				@add-item="$emit('add-item', $event)"
 				@editor-action-selected="$emit('editor-action-selected', $event)"
 				@editor-action-de-selected="$emit('editor-action-de-selected', $event)"
 			></tree-item>
-			<li class="add" @click="$emit('add-item', item)">+</li>
 		</ul>
 	</li>
 </template>
@@ -63,16 +60,6 @@
                             this.$emit('editor-action-de-selected', this.item);
                         }
                     }
-                }
-            },
-            /**
-             * This method allow to create sub tree in item by dbclicking
-             * If need to create make subtrees add @ondbclick and invoke this makeFolder
-             */
-            makeFolder: function () {
-                if (!this.isFolder) {
-                    this.$emit('make-folder', this.item);
-                    this.isOpen = true
                 }
             }
         }

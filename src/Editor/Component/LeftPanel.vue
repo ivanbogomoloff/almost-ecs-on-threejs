@@ -3,11 +3,14 @@
 		<h1>Editor version {{ version }}</h1>
 		<div class="controls-panel">
 			<div id="controls-left_entities-container" class="controls-panel-container">
+				<a href="">Add New entity (+)</a>
+				<hr>
 				<tree-view
 					v-bind:tree_data="treeData"
 					v-on:onEditorActionSelected="onEditorActionSelected"
 					v-on:onEditorActionDeSelected="onEditorActionDeSelected"
 				></tree-view>
+
 			</div>
 			<hr>
 		</div>

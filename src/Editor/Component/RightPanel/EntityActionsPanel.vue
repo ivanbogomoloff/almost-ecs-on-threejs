@@ -8,6 +8,14 @@
 					{{ entityAction }}
 				</p>
 				<div class="controls-right_entity-action-item-a-list">
+					<div class="controls-right_entity-action-control-item">
+						<div>
+							<table class="entity-control-table">
+								<tr><td><a href="">Delete</a></td><td><a href="">Rename</a></td></tr>
+							</table>
+							<hr>
+						</div>
+					</div>
 					<div v-if="hasComponent(entityAction.entity_id, 'position')" class="controls-right_entity-action-control-item">
 						<Position
 							v-bind:entity_id="entityAction.entity_id"

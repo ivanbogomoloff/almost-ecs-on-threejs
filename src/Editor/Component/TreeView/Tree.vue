@@ -3,8 +3,6 @@
 		<tree-item
 			class="item"
 			:item="tree_data"
-			@make-folder="makeFolder"
-			@add-item="addItem"
 			@editor-action-selected="onEditorActionSelected"
 			@editor-action-de-selected="onEditorActionDeSelected"
 		></tree-item>
@@ -24,15 +22,6 @@
             }
         },
         methods: {
-            makeFolder: function (item) {
-                Vue.set(item, 'children', []);
-                this.addItem(item);
-            },
-            addItem: function (item) {
-                item.children.push({
-                    name: 'new stuff'
-                });
-            },
             onEditorActionSelected: function (data) {
                 this.$emit('onEditorActionSelected', data);
             },
