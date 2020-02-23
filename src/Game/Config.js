@@ -1,5 +1,5 @@
 let Config = {
-    FPS: 10,
+    FPS: 30,
     getFps: function () {
         return this.FPS;
     }

@@ -11,7 +11,6 @@
 					<div v-if="hasComponent(entityAction.entity_id, 'position')" class="controls-right_entity-action-control-item">
 						<position
 							v-bind:entity_id="entityAction.entity_id"
-							v-bind:cmp_data="getComponentData(entityAction.entity_id, 'position')"
 						></position>
 					</div>
 					<div v-if="hasComponent(entityAction.entity_id, 'highlight')" class="controls-right_entity-action-control-item">
@@ -49,9 +48,6 @@
 		methods: {
             hasComponent: function (entity_id, component_id) {
 				return EDITOR.hasEntityComponent(entity_id, component_id);
-            },
-            getComponentData: function (entity_id, component_id) {
-                return EDITOR.getEntityComponentData(entity_id, component_id);
             }
 		},
         computed: {

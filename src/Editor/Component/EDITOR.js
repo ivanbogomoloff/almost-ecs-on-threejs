@@ -15,34 +15,6 @@ const EDITOR = {
     hasEntityComponent: function (entityId, componentId) {
         return EDITOR.entities_components[entityId][componentId];
     },
-    /**
-     * Very important!
-     * Changing component data per entity will reflect data on all systems.
-     * If we want change component data only for special system, we need go to
-     * Entity -> Systems -> TargetSystem -> and change component data only for this system!
-     *
-     * @param entityId
-     * @param componentId
-     * @param systemId
-     *
-     */
-    getEntityComponentData: function (entityId, componentId, systemId) {
-        switch (componentId) {
-            case PositionComponent.id:
-                let pos = {x: 0.0, y: 0.0, z: 0.0};
-                if(systemId) {
-                    pos = PositionComponent.get(systemId, entityId);
-                }
-                return {
-                    x: pos.x,
-                    y: pos.y,
-                    z: pos.z,
-                    systems: PositionComponent.getSystemsForEntity(entityId)
-                };
-
-                break;
-        }
-    },
     tree: {
         entities: {},
         buildEntities: function () {
