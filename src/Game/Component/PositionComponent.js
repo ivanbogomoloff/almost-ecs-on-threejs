@@ -1,20 +1,20 @@
 function Position(p) {
-    this.x = p.x;
-    this.y = p.y;
-    this.z = p.z;
+    this.x = Number(p.x);
+    this.y = Number(p.y);
+    this.z = Number(p.z);
     this.changed = false;
     this._prev_x = this.x;
     this._prev_y = this.y;
     this._prev_z = this.z;
 
     this.setX = function (x) {
-        this.x = x;
+        this.x = Number(x);
     };
     this.setY = function (y) {
-        this.y = y;
+        this.y = Number(y);
     };
     this.setZ = function (z) {
-        this.z = z;
+        this.z = Number(z);
     };
 
     this.move = function () {

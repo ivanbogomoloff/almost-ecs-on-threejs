@@ -77,19 +77,19 @@
             },
             onChangeX: function (event, systemId) {
                 //TODO fix to model
-                let val = new Number(event.target.value.replace(/,/ig, '.'));
+                let val = Number(event.target.value.replace(/,/ig, '.'));
                 EDITOR.entityAction('position.change_x', [systemId,this.entity_id, val]);
 	            this.findById(systemId,'x').value = val;
             },
             onChangeY: function (event, systemId) {
                 //TODO fix to model
-                let val = new Number(event.target.value.replace(/,/ig, '.'));
+                let val = Number(event.target.value.replace(/,/ig, '.'));
                 EDITOR.entityAction('position.change_y', [systemId,this.entity_id, val]);
                 this.findById(systemId,'y').value = val;
             },
             onChangeZ: function (event, systemId) {
                 //TODO fix to model
-                let val = new Number(event.target.value.replace(/,/ig, '.'));
+                let val = Number(event.target.value.replace(/,/ig, '.'));
                 EDITOR.entityAction('position.change_z', [systemId,this.entity_id, val]);
                 this.findById(systemId,'z').value = val;
             },

@@ -9,7 +9,7 @@ class PositionSystem
             let systemId = params[0];
             let entity_id = params[1];
 
-            return 0.1;
+            return 1;
         });
 
         EDITOR.addEntityAction('position.get', function (params) {
