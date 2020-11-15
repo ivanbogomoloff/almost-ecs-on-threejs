@@ -17,11 +17,10 @@ import {PositionComponent} from "./Game/Component/PositionComponent";
 import {MovementSystem} from "./Game/System/MovementSystem";
 import {Config} from "./Game/Config";
 // Editor
-import Vue from 'vue/dist/vue.esm'
-import {EDITOR} from "./Editor/EDITOR";
-import LeftPanel from './Editor/LeftPanel.vue'
-import RightPanel from './Editor/RightPanel.vue'
 import {HighLightSystem} from "./Editor/System/HighLightSystem";
+import {UiSystem} from "./Editor/System/UiSystem";
+import {EditorSystem} from "./Editor/System/EditorSystem";
+import {PositionSystem} from "./Editor/System/PositionSystem";
 
 let userEntity = ECS.entity.create('user');
 ECS.entity.addComponent(userEntity, ECS.component.create(CameraComponent.id));
@@ -89,24 +88,37 @@ ECS.system.registerEntity('render', lightEntity);
 ECS.system.registerEntity('render', cubeEntity);
 ECS.system.registerEntity('render', cubeEntity2);
 
-let movementSystem = new MovementSystem(renderingSystem);
+let movementSystem = new MovementSystem(ECS.system.getSystem('render'));
 ECS.system.add('movement', movementSystem);
 
 ECS.system.registerEntity('movement', cubeEntity);
 ECS.system.registerEntity('movement', cubeEntity2);
 
-let rayCasterSystem = new RayCasterSystem(renderingSystem);
+let rayCasterSystem = new RayCasterSystem(ECS.system.getSystem('render'));
 ECS.system.add('raycaster', rayCasterSystem);
 ECS.system.registerEntity('raycaster', cubeEntity);
 ECS.system.registerEntity('raycaster', cubeEntity2);
 
 /**
- * EDITOR SYSTEMS
+ * EDITOR START HERE!
  */
-ECS.system.add('editor.high_light', new HighLightSystem(renderingSystem));
+ECS.system.add('editor', new EditorSystem(ECS));
+ECS.system.registerEntity('editor', cubeEntity);
+ECS.system.registerEntity('editor', cubeEntity2);
+ECS.system.registerEntity('editor', mapEntity);
+
+// We need call dependencies from ECS by getSystem, becase we can DISABLE/REMOVE system!
+// Best way do it in soft manner, like check IF system != null
+ECS.system.add('editor.ui', new UiSystem(ECS.system.getSystem('editor')));
+
+ECS.system.add('editor.high_light', new HighLightSystem(ECS.system.getSystem('render')));
 ECS.system.registerEntity('editor.high_light', cubeEntity);
 ECS.system.registerEntity('editor.high_light', cubeEntity2);
 ECS.system.registerEntity('editor.high_light', mapEntity);
+
+ECS.system.add('editor.position', new PositionSystem());
+ECS.system.registerEntity('editor.position', cubeEntity);
+ECS.system.registerEntity('editor.position', cubeEntity2);
 
 ECS.system.init();
 
@@ -120,68 +132,3 @@ let loop = new FpsLoopHelper(function () {
 }, fps);
 
 loop.run();
-
-/**
- * EDITOR START HERE!
- */
-Vue.config.productionTip = false;
-EDITOR.version = '1.0';
-EDITOR.entities = ECS.entities;
-EDITOR.entities_high_lighted_counter = 0;
-
-EDITOR.vue = new Vue({
-    el: '#editor',
-    data: {
-        showRightPanel: false,
-        entityActionShow: false,
-        selectedEntity: null,
-        entityAction: ''
-    },
-    methods: {
-        entityPanel_onEntityChanged: function () {
-            EDITOR.vue.showRightPanel   = false;
-            EDITOR.vue.entityActionShow = false;
-            this.selectedEntity = '';
-        },
-        entityPanel_onEntityActionChanged: function () {
-            
-            console.log('test');
-            console.log(this.entityAction);
-        }
-    },
-    components: {
-        'left-panel': LeftPanel,
-        'right-panel': RightPanel
-    }
-});
-
-EDITOR.addEntityAction('high_light_on', function (entity) {
-    if(ECS.entity.has(entity) && ECS.system.hasSystem('editor.high_light'))
-    {
-        let system = ECS.system.getSystem('editor.high_light');
-        ECS.system.disableSystem('raycaster');
-        system.highLight(entity);
-        EDITOR.entities_high_lighted_counter++;
-    }
-});
-EDITOR.addEntityAction('high_light_off', function (entity) {
-    if(ECS.entity.has(entity) && ECS.system.hasSystem('editor.high_light'))
-    {
-        let system = ECS.system.getSystem('editor.high_light');
-        system.undoHighLight(entity);
-        EDITOR.entities_high_lighted_counter--;
-        // Can highlight many entities and when all unhighlighted, then
-        // enable raycaster!
-        if(EDITOR.entities_high_lighted_counter <= 0) {
-            ECS.system.enableSystem('raycaster');
-            EDITOR.entities_high_lighted_counter = 0;
-        }
-    }
-});
-
-EDITOR.addEntityAction('move', function (entity) {
-    EDITOR.vue.entityActionShow = true;
-    EDITOR.vue.showRightPanel   = true;
-    EDITOR.vue.entityAction     = 'move';
-    EDITOR.vue.selectedEntity   = entity;
-});

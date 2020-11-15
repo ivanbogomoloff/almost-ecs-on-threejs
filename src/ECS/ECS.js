@@ -88,6 +88,7 @@ const ECS = {
                 if(typeof system.init === 'function')
                 {
                     system.init(systemId, ECS.system.getEntities(systemId));
+                    console.log('['+systemId+'] init');
                 } else {
                     console.log('['+systemId+'] error: init method not exists');
                 }
@@ -160,7 +161,8 @@ const ECS = {
             }
         },
         hasEntity: function(systemId, entity) {
-            return ECS.system_entities_index_map.hasOwnProperty(systemId+"_"+entity);
+            return ECS.system_entities.hasOwnProperty(systemId)
+                && ECS.system_entities[systemId].hasOwnProperty(entity);
         },
         getEntities: function(systemId)
         {
